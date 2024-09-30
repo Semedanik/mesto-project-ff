@@ -1,9 +1,5 @@
-// card.js
-
-// Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 
-// Функция создания карточки
 export function createCard(item, deleteCard, openImagePopup, toggleLike) {
   const cardElement = cardTemplate.cloneNode(true);
 
@@ -27,13 +23,11 @@ export function createCard(item, deleteCard, openImagePopup, toggleLike) {
   return cardElement;
 }
 
-// Функция удаления карточки
 export function deleteCard(event) {
   const listItem = event.target.closest(".card");
   listItem.remove();
 }
 
-// Функция для переключения лайка
 export function toggleLike(event) {
   const likeButton = event.target;
   likeButton.classList.toggle("card__like-button_is-active");

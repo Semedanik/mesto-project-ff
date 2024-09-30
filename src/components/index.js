@@ -1,7 +1,7 @@
-import "./pages/index.css";
+import "../pages/index.css";
 import { initialCards } from "./cards.js";
-import { createCard, deleteCard, toggleLike } from "./components/card.js";
-import { openModal, closeModal } from "./components/modal.js";
+import { createCard, deleteCard, toggleLike } from "./card.js"; //объеденить в одну функцию
+import { openModal, closeModal } from "./modal.js";
 
 // DOM узлы
 const placesContainer = document.querySelector(".places__list");
@@ -61,7 +61,6 @@ initialCards.forEach((item) => {
   placesContainer.append(newCard);
 });
 
-// Начало работы формы с редактированием
 const formElement = document.querySelector(".popup__form");
 const nameInput = formElement.elements.name;
 const jobInput = formElement.elements.description;
