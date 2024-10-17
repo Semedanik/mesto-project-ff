@@ -21,3 +21,69 @@
   right: 0;
   z-index: 10;
 }
+
+/* Стили для ошибок валидации */
+.popup__input_type_error {
+  border-color: red;
+}
+
+.popup__error_visible {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.popup__button_disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Стили для отображения количества лайков */
+.card__like-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card__like-button {
+  margin-bottom: 5px;
+}
+
+.card__like-count {
+  font-size: 14px;
+  color: #000;
+}
+
+.profile__image-container {
+  position: relative;
+  display: inline-block;
+  width: 120px; 
+  height: 120px; 
+}
+
+.profile__image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.profile__edit-avatar-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/Users/danil/Desktop/Проекты/mesto-project-ff/src/images/edit-icon.svg') no-repeat center;
+  background-size: 50%; /* Размер иконки */
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 50%;
+}
+
+.profile__image-container:hover .profile__edit-avatar-button {
+  opacity: 1;
+}
