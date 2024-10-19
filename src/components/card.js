@@ -1,14 +1,11 @@
-import { deleteCard as deleteCardFromServer, likeCard, dislikeCard } from "./api.js";
-import { openModal, closeModal } from "./modal.js";
-
 const cardTemplate = document.querySelector("#card-template").content;
 
 export function createCard(
   item,
-  handleDeleteCard,
+  userId,
+  deleteCard,
   openImagePopup,
-  handleLikeCard,
-  userId
+  toggleLike
 ) {
   const cardElement = cardTemplate.cloneNode(true);
 
@@ -23,59 +20,109 @@ export function createCard(
   cardTitle.textContent = item.name;
   likeCount.textContent = item.likes.length;
 
-  // Проверяем, является ли текущий пользователь владельцем карточки
-  if (item.owner._id !== userId) {
-    deleteButton.remove();
+  // Set the data-card-id attribute
+  cardElement.firstElementChild.setAttribute("data-card-id", item._id);
+
+  if (item.owner._id === userId) {
+    deleteButton.style.display = "block";
   } else {
-    deleteButton.addEventListener("click", () => {
-      openModal(document.querySelector(".popup_type_confirm"));
-      document.querySelector(".popup__button_confirm").addEventListener("click", () => {
-        handleDeleteCard(item._id, cardElement);
-        closeModal(document.querySelector(".popup_type_confirm"));
-      }, { once: true });
-    });
+    deleteButton.style.display = "none";
   }
 
-  // Проверяем, лайкнул ли пользователь карточку
-  if (item.likes.some(like => like._id === userId)) {
+  deleteButton.addEventListener("click", () => deleteCard(item._id));
+
+  cardImage.addEventListener("click", () =>
+    openImagePopup(item.link, item.name)
+  );
+
+  likeButton.addEventListener("click", () =>
+    toggleLike(item._id, likeButton, likeCount)
+  );
+
+  if (item.likes.some((like) => like._id === userId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
-
-  cardImage.addEventListener("click", () => {
-    openImagePopup(item.link, item.name);
-  });
-
-  likeButton.addEventListener("click", () => {
-    handleLikeCard(
-      item._id,
-      likeButton.classList.contains("card__like-button_is-active"),
-      likeButton,
-      likeCount
-    );
-  });
 
   return cardElement;
 }
 
-export function deleteCard(cardId, cardElement) {
-  deleteCardFromServer(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+export function deleteCard(cardId) {
+  return fetch(
+    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/${cardId}`,
+    {
+      method: "DELETE",
+      headers: {
+        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((res) => {
+    if (res.ok) {
+      const listItem = document.querySelector(`[data-card-id="${cardId}"]`);
+      if (listItem) {
+        listItem.remove();
+      } else {
+        console.error(`Card with ID ${cardId} not found in the DOM.`);
+      }
+    }
+    return res.json();
+  });
 }
 
-export function toggleLike(cardId, isLiked, likeButton, likeCount) {
-  const likeAction = isLiked ? dislikeCard : likeCard;
+export function likeCard(cardId) {
+  return fetch(
+    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/likes/${cardId}`,
+    {
+      method: "PUT",
+      headers: {
+        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res.statusText);
+  });
+}
 
-  likeAction(cardId)
-    .then((cardData) => {
-      likeButton.classList.toggle("card__like-button_is-active");
-      likeCount.textContent = cardData.likes.length;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+export function dislikeCard(cardId) {
+  return fetch(
+    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/likes/${cardId}`,
+    {
+      method: "DELETE",
+      headers: {
+        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(res.statusText);
+  });
+}
+
+export function toggleLike(cardId, likeButton, likeCount) {
+  if (likeButton.classList.contains("card__like-button_is-active")) {
+    dislikeCard(cardId)
+      .then((card) => {
+        likeButton.classList.remove("card__like-button_is-active");
+        likeCount.textContent = card.likes.length;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  } else {
+    likeCard(cardId)
+      .then((card) => {
+        likeButton.classList.add("card__like-button_is-active");
+        likeCount.textContent = card.likes.length;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 }

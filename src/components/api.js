@@ -1,12 +1,11 @@
 const config = {
-  baseUrl: "https://nomoreparties.co/v1/wff-cohort-24",
+  baseUrl: "https://mesto.nomoreparties.co/v1/wff-cohort-24",
   headers: {
     authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
     "Content-Type": "application/json",
   },
 };
 
-// Функция для проверки ответа от сервера
 function checkResponse(res) {
   if (res.ok) {
     return res.json();
@@ -14,75 +13,67 @@ function checkResponse(res) {
   return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-// Функция для получения информации о пользователе
-export function getUserInfo() {
+export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then(checkResponse);
-}
+};
 
-// Функция для получения начальных карточек
-export function getInitialCards() {
+export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then(checkResponse);
-}
+};
 
-// Функция для обновления информации о пользователе
-export function updateUserInfo(data) {
+export const editProfile = (name, about) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
-      name: data.name,
-      about: data.about,
+      name: name,
+      about: about,
     }),
   }).then(checkResponse);
-}
+};
 
-// Функция для добавления новой карточки
-export function addNewCard(data) {
+export const addCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({
-      name: data.name,
-      link: data.link,
+      name: name,
+      link: link,
     }),
   }).then(checkResponse);
-}
+};
 
-// Функция для удаления карточки
-export function deleteCard(cardId) {
+export const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
   }).then(checkResponse);
-}
+};
 
-// Функция для постановки лайка
-export function likeCard(cardId) {
-  return fetch(`${config.baseUrl}/cards/${cardId}/likes`, {
+export const likeCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
   }).then(checkResponse);
-}
+};
 
-// Функция для снятия лайка
-export function dislikeCard(cardId) {
-  return fetch(`${config.baseUrl}/cards/${cardId}/likes`, {
+export const dislikeCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
   }).then(checkResponse);
-}
+};
 
-// Функция для обновления аватара пользователя
-export function updateAvatar(data) {
+export const updateAvatar = (avatar) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
-      avatar: data.avatar,
+      avatar: avatar,
     }),
   }).then(checkResponse);
-}
+};
