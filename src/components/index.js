@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, deleteCard, toggleLike } from "./card.js";
+import { createCard, toggleLike } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
 import { enableValidation, clearValidation } from "./validation.js";
 import {
@@ -10,6 +10,7 @@ import {
   updateAvatar,
   likeCard,
   dislikeCard,
+  deleteCard, 
 } from "./api.js";
 
 // DOM узлы
@@ -58,7 +59,7 @@ placeForm.addEventListener("submit", (event) => {
       const cardElement = createCard(
         newCard,
         userId,
-        deleteCard,
+        deleteCard, // Используем deleteCard из модуля API
         openImagePopup,
         toggleLike
       );
@@ -104,7 +105,7 @@ function renderCards(cards, userId) {
     const newCard = createCard(
       item,
       userId,
-      deleteCard,
+      deleteCard, // Используем deleteCard из модуля API
       openImagePopup,
       toggleLike
     );

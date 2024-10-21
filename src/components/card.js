@@ -1,3 +1,5 @@
+import { deleteCard as apiDeleteCard, likeCard, dislikeCard } from "./api"; // Импортируем функции из модуля API
+
 const cardTemplate = document.querySelector("#card-template").content;
 
 export function createCard(
@@ -44,65 +46,6 @@ export function createCard(
   }
 
   return cardElement;
-}
-
-export function deleteCard(cardId) {
-  return fetch(
-    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/${cardId}`,
-    {
-      method: "DELETE",
-      headers: {
-        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => {
-    if (res.ok) {
-      const listItem = document.querySelector(`[data-card-id="${cardId}"]`);
-      if (listItem) {
-        listItem.remove();
-      } else {
-        console.error(`Card with ID ${cardId} not found in the DOM.`);
-      }
-    }
-    return res.json();
-  });
-}
-
-export function likeCard(cardId) {
-  return fetch(
-    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/likes/${cardId}`,
-    {
-      method: "PUT",
-      headers: {
-        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(res.statusText);
-  });
-}
-
-export function dislikeCard(cardId) {
-  return fetch(
-    `https://mesto.nomoreparties.co/v1/wff-cohort-24/cards/likes/${cardId}`,
-    {
-      method: "DELETE",
-      headers: {
-        authorization: "fe092b0c-102d-4587-92ce-49a4ec67b845",
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(res.statusText);
-  });
 }
 
 export function toggleLike(cardId, likeButton, likeCount) {
