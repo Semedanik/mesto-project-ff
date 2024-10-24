@@ -32,7 +32,7 @@ export function createCard(
   }
 
   deleteButton.addEventListener("click", (event) => {
-    event.stopPropagation(); // Предотвращаем всплытие события
+    event.stopPropagation(); 
     handleDelete(item._id);
   });
 

@@ -78,8 +78,6 @@ placeForm.addEventListener("submit", (event) => {
     });
 });
 
-// Остальной код остается без изменений...
-
 // Обработчик событий для кнопок редактирования и добавления
 btnEdit.addEventListener("click", () => {
   fillProfileInputs();
