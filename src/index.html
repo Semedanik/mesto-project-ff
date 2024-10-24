@@ -11,12 +11,11 @@
   <header class="header page__section">
     <img src="<%=require('./images/logo.svg')%>" alt="Логотип проекта масто" class="logo header__logo">
   </header>
-  <main class="content">
+   <main class="content">
     <section class="profile page__section">
       <div class="profile__image-container">
-        <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>)"></div>
-        <button class="profile__edit-avatar-button" style="background-image: url(<%=require('./images/edit-icon.svg')%>)" type="button"></button>
-      </div>
+    <div class="profile__image" aria-label="Изменить аватар" style="background-image: url('<%=require('./images/avatar.jpg')%>')"></div>
+</div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
         <button class="profile__edit-button" type="button"></button>
@@ -84,7 +83,7 @@
 </div>
 
 <template id="card-template">
-  <li class="places__item card" data-owner-id="">
+  <li class="places__item card" data-card-id="">
     <img class="card__image" src="" alt="" />
     <button type="button" class="card__delete-button"></button>
     <div class="card__description">

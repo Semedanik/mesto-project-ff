@@ -1,5 +1,7 @@
+// index.js
+
 import "../pages/index.css";
-import { createCard, toggleLike } from "./card.js";
+import { createCard, toggleLike, handleDelete } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
 import { enableValidation, clearValidation } from "./validation.js";
 import {
@@ -10,7 +12,7 @@ import {
   updateAvatar,
   likeCard,
   dislikeCard,
-  deleteCard, 
+  deleteCard as apiDeleteCard,
 } from "./api.js";
 
 // DOM узлы
@@ -59,7 +61,7 @@ placeForm.addEventListener("submit", (event) => {
       const cardElement = createCard(
         newCard,
         userId,
-        deleteCard, // Используем deleteCard из модуля API
+        (cardId) => handleDelete(cardId), // Используем handleDelete из модуля card.js
         openImagePopup,
         toggleLike
       );
@@ -75,6 +77,8 @@ placeForm.addEventListener("submit", (event) => {
       submitButton.textContent = "Сохранить";
     });
 });
+
+// Остальной код остается без изменений...
 
 // Обработчик событий для кнопок редактирования и добавления
 btnEdit.addEventListener("click", () => {
@@ -105,7 +109,7 @@ function renderCards(cards, userId) {
     const newCard = createCard(
       item,
       userId,
-      deleteCard, // Используем deleteCard из модуля API
+      (cardId) => handleDelete(cardId), // Используем handleDelete из модуля card.js
       openImagePopup,
       toggleLike
     );
@@ -138,11 +142,9 @@ function handleProfileFormSubmit(evt) {
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
 // Обработчик событий для кнопки редактирования аватара
-const profileAvatarEditButton = document.querySelector(
-  ".profile__edit-avatar-button"
-);
+const profileAvatarEdit = document.querySelector(".profile__image-container");
 
-profileAvatarEditButton.addEventListener("click", () => {
+profileAvatarEdit.addEventListener("click", () => {
   openModal(popupAvatar);
   clearValidation(avatarForm, validationConfig);
 });

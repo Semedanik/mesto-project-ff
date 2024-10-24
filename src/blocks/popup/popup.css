@@ -53,36 +53,56 @@
   font-size: 14px;
   color: #000;
 }
-
 .profile__image-container {
-  position: relative;
-  display: inline-block;
-  width: 120px; 
-  height: 120px; 
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden; /* Убедимся, что псевдоэлементы не выходят за пределы контейнера */
 }
 
 .profile__image {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
 }
 
-.profile__edit-avatar-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 50%; /* Размер иконки */
-  border: none;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s;
-  border-radius: 50%;
+.profile__image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Серый фон с прозрачностью */
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.profile__image-container:hover .profile__edit-avatar-button {
-  opacity: 1;
+.profile__image-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px; /* пример ширины иконки */
+    height: 20px; /* пример высоты иконки */
+    background-image: url("../../images/edit-icon.svg"); /* путь к иконке */
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile__image-container:hover::before {
+    opacity: 1;
+}
+
+.profile__image-container:hover::after {
+    opacity: 1;
 }

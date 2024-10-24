@@ -5,7 +5,7 @@ const cardTemplate = document.querySelector("#card-template").content;
 export function createCard(
   item,
   userId,
-  deleteCard,
+  handleDelete,
   openImagePopup,
   toggleLike
 ) {
@@ -22,7 +22,7 @@ export function createCard(
   cardTitle.textContent = item.name;
   likeCount.textContent = item.likes.length;
 
-  // Set the data-card-id attribute
+  // Устанавливаем атрибут data-card-id
   cardElement.firstElementChild.setAttribute("data-card-id", item._id);
 
   if (item.owner._id === userId) {
@@ -31,7 +31,10 @@ export function createCard(
     deleteButton.style.display = "none";
   }
 
-  deleteButton.addEventListener("click", () => deleteCard(item._id));
+  deleteButton.addEventListener("click", (event) => {
+    event.stopPropagation(); // Предотвращаем всплытие события
+    handleDelete(item._id);
+  });
 
   cardImage.addEventListener("click", () =>
     openImagePopup(item.link, item.name)
@@ -68,4 +71,18 @@ export function toggleLike(cardId, likeButton, likeCount) {
         console.error(err);
       });
   }
+}
+
+export function handleDelete(cardId) {
+  apiDeleteCard(cardId)
+    .then(() => {
+      // Удаляем карточку из DOM
+      const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+      if (cardElement) {
+        cardElement.remove();
+      }
+    })
+    .catch((err) => {
+      console.error("Ошибка при удалении карточки:", err);
+    });
 }
